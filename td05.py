@@ -144,8 +144,23 @@ def palette_couleur_triee_par_bleu(W,H,px,k):
     for x in range (0,W):
         for y in range (0,H):
             liste_couleur.append(px[x,y])
+    liste_couleur.sort(key=lambda x : x[2])
+    palette_k_couleur=[]
+    pas=len(liste_couleur)//k
+    for i in range (0,k):
+        palette_k_couleur.append(liste_couleur[(i*pas+(i+1)*pas)//2])
+    im2=Image.new('RGB',(50,50*k))
+    px2=im2.load()
+    indice_coloriage=0
+    while indice_coloriage<k:
+        r,g,b=palette_k_couleur[indice_coloriage]
+        for y in range(indice_coloriage*50,(indice_coloriage+1)*50):
+            for x in range (0,50):
+                px2[x,y]=r,g,b
+        indice_coloriage+=1
+    return(im2)
 #%% ex 6
-im2=recoloriage_distance_euclidienne(W, H, px, 10,palette_couleur_distance_euclidienne)
+im2=recoloriage_distance_euclidienne(W, H, px, 10,palette_couleur_triee_par_bleu)
 im2.show()
 px2=im2.load()
 #%%
@@ -159,3 +174,4 @@ print(score1,score2)
 #%% test im.quantize
 im1=im.quantize(256)
 im1.show()
+#%%
